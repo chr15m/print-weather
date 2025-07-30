@@ -28,9 +28,10 @@ get_weather_icon_path() {
     echo "${icon_path}${icon_name}"
 }
 
-# Perth, Australia coordinates
-LATITUDE="-31.9344"
-LONGITUDE="115.8716"
+# Coordinates can be passed as command line arguments or environment variables.
+# Default is Perth, Australia.
+LATITUDE=${1:-${LATITUDE:--31.9344}}
+LONGITUDE=${2:-${LONGITUDE:-115.8716}}
 TIMEZONE="Australia/Perth"
 
 # API parameters
