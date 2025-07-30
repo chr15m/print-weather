@@ -18,7 +18,6 @@ except ImportError:
     sys.exit(1)
 
 # Constants
-TIMEZONE = "Australia/Perth"
 API_URL = "https://api.open-meteo.com/v1/forecast"
 DAILY_VARS = "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_hours"
 FORECAST_DAYS = "1"
@@ -30,11 +29,12 @@ def check_dependencies():
         sys.stderr.write("Please run 'git submodule update --init' or 'git clone https://github.com/erikflowers/weather-icons'.\n")
         sys.exit(1)
 
-def get_coordinates():
-    """Gets latitude and longitude from command line args, environment variables, or defaults."""
-    lat = sys.argv[1] if len(sys.argv) > 1 else os.environ.get('LATITUDE', "-31.9344")
-    lon = sys.argv[2] if len(sys.argv) > 2 else os.environ.get('LONGITUDE', "115.8716")
-    return lat, lon
+def get_config():
+    """Gets config from command line args, environment variables, or defaults."""
+    lat = sys.argv[1] if len(sys.argv) > 1 else os.environ.get('LATITUDE', "51.5072")
+    lon = sys.argv[2] if len(sys.argv) > 2 else os.environ.get('LONGITUDE', "-0.1276")
+    timezone = sys.argv[3] if len(sys.argv) > 3 else os.environ.get('TIMEZONE', "Europe/London")
+    return lat, lon, timezone
 
 def get_weather_icon_path(code):
     """Maps weather code to icon file path."""
@@ -53,11 +53,11 @@ def get_weather_icon_path(code):
     icon_name = icon_map.get(code, "wi-na.svg")
     return Path("weather-icons/svg/") / icon_name
 
-def fetch_weather_data(latitude, longitude):
+def fetch_weather_data(latitude, longitude, timezone):
     """Fetches weather data from the Open-Meteo API."""
     params = {
         "latitude": latitude, "longitude": longitude, "daily": DAILY_VARS,
-        "timezone": TIMEZONE, "forecast_days": FORECAST_DAYS,
+        "timezone": timezone, "forecast_days": FORECAST_DAYS,
     }
     url = f"{API_URL}?{urllib.parse.urlencode(params)}"
     response_text = ""
@@ -135,8 +135,8 @@ def main():
     """Main script execution."""
     check_dependencies()
     
-    lat, lon = get_coordinates()
-    daily_data = fetch_weather_data(lat, lon)
+    lat, lon, timezone = get_config()
+    daily_data = fetch_weather_data(lat, lon, timezone)
 
     weather_code = daily_data['weather_code'][0]
     temp_min = round(daily_data['temperature_2m_min'][0])
