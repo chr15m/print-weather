@@ -64,9 +64,7 @@ LATITUDE=51.5072 LONGITUDE=-0.1276 TIMEZONE="Europe/London" ./printweather.py > 
 
 To run the script automatically at 5am every day in the system's timezone, edit the crontab with `crontab -e` and add the following line.
 
-Because the script can be run from any directory, you no longer need to `cd` into the project folder. You should use the full path to the script.
-
-You can use environment variables to configure the location and timezone.
+Use environment variables to configure the location and timezone.
 
 ```
 0 5 * * * LATITUDE=51.5072 LONGITUDE=-0.1276 TIMEZONE="Europe/London" /path/to/print-weather/printweather.py > /dev/usb/lp0
