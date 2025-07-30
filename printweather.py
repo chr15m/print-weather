@@ -21,13 +21,41 @@ API_URL = "https://api.open-meteo.com/v1/forecast"
 DAILY_VARS = "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_hours"
 FORECAST_DAYS = "1"
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+ICON_BASE_URL = "https://github.com/erikflowers/weather-icons/raw/refs/heads/master/svg/"
+ICON_NAMES = [
+    "wi-cloudy.svg", "wi-day-cloudy.svg", "wi-day-rain.svg",
+    "wi-day-showers.svg", "wi-day-snow.svg", "wi-day-sunny.svg", "wi-fog.svg",
+    "wi-na.svg", "wi-rain.svg", "wi-showers.svg", "wi-sleet.svg",
+    "wi-snow.svg", "wi-sprinkle.svg", "wi-storm-showers.svg",
+    "wi-thunderstorm.svg",
+]
+
+def download_icons():
+    """Downloads the necessary weather icons."""
+    icons_dir = os.path.join(SCRIPT_DIR, "weather-icons", "svg")
+    os.makedirs(icons_dir, exist_ok=True)
+    print(f"Downloading icons to {icons_dir}...")
+    for icon_name in ICON_NAMES:
+        url = f"{ICON_BASE_URL}{icon_name}"
+        dest_path = os.path.join(icons_dir, icon_name)
+        try:
+            sys.stdout.write(f"  Downloading {icon_name}...")
+            sys.stdout.flush()
+            with urllib.request.urlopen(url) as response, open(dest_path, 'wb') as out_file:
+                out_file.write(response.read())
+            sys.stdout.write("done.\n")
+        except urllib.error.URLError as e:
+            sys.stderr.write(f"\nError downloading {icon_name}: {e}\n")
+    print("Icon download complete.")
+    sys.exit(0)
 
 def check_dependencies():
     """Checks for external dependencies."""
-    if not os.path.isdir(os.path.join(SCRIPT_DIR, "weather-icons")):
-        sys.stderr.write("Error: weather-icons directory not found.\n")
-        sys.stderr.write("Please run 'git clone https://github.com/erikflowers/weather-icons'.\n")
-        sys.stderr.write("Or download the zip from https://github.com/erikflowers/weather-icons/archive/refs/heads/master.zip.\n")
+    if not os.path.isdir(os.path.join(SCRIPT_DIR, "weather-icons", "svg")):
+        sys.stderr.write("Error: weather-icons/svg directory not found.\n")
+        sys.stderr.write(f"Please run 'printweather.py --download-icons' to download them.\n")
+        sys.stderr.write("Or 'git clone https://github.com/erikflowers/weather-icons'.\n")
+        sys.stderr.write("Or download the zip: https://github.com/erikflowers/weather-icons/archive/refs/heads/master.zip\n")
         sys.exit(1)
 
 def get_config():
@@ -134,6 +162,9 @@ def format_date_with_ordinal(d):
 
 def main():
     """Main script execution."""
+    if len(sys.argv) > 1 and sys.argv[1] == '--download-icons':
+        download_icons()
+
     check_dependencies()
 
     lat, lon, timezone = get_config()

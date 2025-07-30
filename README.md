@@ -9,7 +9,6 @@ Prints a daily weather forecast on an ESC/POS thermal printer, such as the "Biso
 - **Python 3**
 - **Pillow**: The Python imaging library.
 - **ImageMagick**: For converting SVG icons to a printable format.
-- **weather-icons**: For the weather icon graphics.
 
 ## Setup
 
@@ -27,10 +26,13 @@ Prints a daily weather forecast on an ESC/POS thermal printer, such as the "Biso
 
 2.  **Get the weather icons:**
 
-    Clone the icons repository into the project directory:
+    Run the script with the `--download-icons` flag to download only the necessary icon files:
     ```bash
-    git clone https://github.com/erikflowers/weather-icons
+    ./printweather.py --download-icons
     ```
+
+    - Or `git clone https://github.com/erikflowers/weather-icons`
+    - Or [download the zip](https://github.com/erikflowers/weather-icons/archive/refs/heads/master.zip).
 
 ## Usage
 
