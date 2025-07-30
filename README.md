@@ -2,6 +2,8 @@
 
 Prints a daily weather forecast on an ESC/POS thermal printer, such as the "Bisofice Mini BT thermal receipt printer".
 
+![Photo of weather-print in action on a thermal receipt printer](./weather-print.jpg)
+
 ## Dependencies
 
 - **Python 3**
