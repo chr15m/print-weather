@@ -1,4 +1,4 @@
-# ESC/POS Weather Printer
+# Thermal Receipt Weather Printer
 
 Prints a daily weather forecast on an ESC/POS thermal printer, such as the "Bisofice Mini BT thermal receipt printer".
 
