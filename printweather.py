@@ -6,7 +6,6 @@ import struct
 import subprocess
 import tempfile
 from datetime import datetime
-from pathlib import Path
 import json
 import urllib.request, urllib.parse, urllib.error
 
@@ -21,10 +20,11 @@ except ImportError:
 API_URL = "https://api.open-meteo.com/v1/forecast"
 DAILY_VARS = "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_hours"
 FORECAST_DAYS = "1"
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 def check_dependencies():
     """Checks for external dependencies."""
-    if not Path("weather-icons").is_dir():
+    if not os.path.isdir(os.path.join(SCRIPT_DIR, "weather-icons")):
         sys.stderr.write("Error: weather-icons directory not found.\n")
         sys.stderr.write("Please run 'git submodule update --init' or 'git clone https://github.com/erikflowers/weather-icons'.\n")
         sys.exit(1)
@@ -51,7 +51,7 @@ def get_weather_icon_path(code):
         96: "wi-storm-showers.svg", 99: "wi-storm-showers.svg",
     }
     icon_name = icon_map.get(code, "wi-na.svg")
-    return Path("weather-icons/svg/") / icon_name
+    return os.path.join(SCRIPT_DIR, "weather-icons", "svg", icon_name)
 
 def fetch_weather_data(latitude, longitude, timezone):
     """Fetches weather data from the Open-Meteo API."""
