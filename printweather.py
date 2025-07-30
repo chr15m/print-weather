@@ -26,7 +26,7 @@ def check_dependencies():
     """Checks for external dependencies."""
     if not os.path.isdir(os.path.join(SCRIPT_DIR, "weather-icons")):
         sys.stderr.write("Error: weather-icons directory not found.\n")
-        sys.stderr.write("Please run 'git submodule update --init' or 'git clone https://github.com/erikflowers/weather-icons'.\n")
+        sys.stderr.write("Please run 'git clone https://github.com/erikflowers/weather-icons'.\n")
         sys.exit(1)
 
 def get_config():
