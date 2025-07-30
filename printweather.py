@@ -111,12 +111,13 @@ def convert_svg_to_png(svg_path):
     os.close(fd)
 
     try:
+        relative_svg_path = os.path.relpath(svg_path, SCRIPT_DIR)
         subprocess.run(
             [
                 "convert", "-background", "white", "-density", "900",
-                str(svg_path), "-resize", "256x256", tmp_png_path,
+                relative_svg_path, "-resize", "256x256", tmp_png_path,
             ],
-            check=True, capture_output=True, text=True
+            check=True, capture_output=True, text=True, cwd=SCRIPT_DIR
         )
         return tmp_png_path
     except FileNotFoundError:
