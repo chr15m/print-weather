@@ -180,17 +180,17 @@ def main():
     weather_icon_png_path = convert_svg_to_png(weather_icon_svg_path)
 
     sys.stdout.buffer.write(b'\x1d\x21\x11')
-    print()
-    print(f"{precip_chance}% ({precip_hours}h)")
-    print(f"Min: {temp_min}")
-    print(f"Max: {temp_max}")
+    sys.stdout.buffer.write(b'\n')
+    sys.stdout.buffer.write(f"{precip_chance}% ({precip_hours}h)\n".encode("ascii"))
+    sys.stdout.buffer.write(f"Min: {temp_min}\n".encode("ascii"))
+    sys.stdout.buffer.write(f"Max: {temp_max}\n".encode("ascii"))
 
     print_image_and_cleanup(weather_icon_png_path)
 
-    print()
-    print(format_date_with_ordinal(datetime.now()))
+    sys.stdout.buffer.write(b'\n')
+    sys.stdout.buffer.write(f"{format_date_with_ordinal(datetime.now())}\n".encode("ascii"))
     sys.stdout.buffer.write(b'\x1d\x21\x00')
-    print("\n\n\n", end='')
+    sys.stdout.buffer.write(b'\n\n\n')
 
 if __name__ == "__main__":
     main()
