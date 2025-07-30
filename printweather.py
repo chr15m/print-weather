@@ -27,6 +27,7 @@ def check_dependencies():
     if not os.path.isdir(os.path.join(SCRIPT_DIR, "weather-icons")):
         sys.stderr.write("Error: weather-icons directory not found.\n")
         sys.stderr.write("Please run 'git clone https://github.com/erikflowers/weather-icons'.\n")
+        sys.stderr.write("Or download the zip from https://github.com/erikflowers/weather-icons/archive/refs/heads/master.zip.\n")
         sys.exit(1)
 
 def get_config():
@@ -117,7 +118,7 @@ def print_image_and_cleanup(image_path):
         header = b'\x1d\x76\x30\x00'
         width_bytes = struct.pack('2B', int(im.size[0] / 8) % 256, int(im.size[0] / (8 * 256)))
         height_bytes = struct.pack('2B', im.size[1] % 256, int(im.size[1] / 256))
-        
+
         sys.stdout.buffer.write(header + width_bytes + height_bytes + im.tobytes())
     finally:
         os.remove(image_path)
@@ -134,7 +135,7 @@ def format_date_with_ordinal(d):
 def main():
     """Main script execution."""
     check_dependencies()
-    
+
     lat, lon, timezone = get_config()
     daily_data = fetch_weather_data(lat, lon, timezone)
 
