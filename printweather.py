@@ -7,13 +7,8 @@ import subprocess
 import tempfile
 from datetime import datetime
 from pathlib import Path
-
-try:
-    import requests
-except ImportError:
-    sys.stderr.write("Error: The 'requests' library is not installed.\n")
-    sys.stderr.write("Please install it, for example: 'pip install requests'\n")
-    sys.exit(1)
+import json
+import urllib.request, urllib.parse, urllib.error
 
 try:
     from PIL import Image, ImageOps
@@ -64,19 +59,21 @@ def fetch_weather_data(latitude, longitude):
         "latitude": latitude, "longitude": longitude, "daily": DAILY_VARS,
         "timezone": TIMEZONE, "forecast_days": FORECAST_DAYS,
     }
+    url = f"{API_URL}?{urllib.parse.urlencode(params)}"
+    response_text = ""
     try:
-        response = requests.get(API_URL, params=params)
-        response.raise_for_status()
-        data = response.json()
+        with urllib.request.urlopen(url) as response:
+            response_text = response.read().decode('utf-8')
+        data = json.loads(response_text)
         if "error" in data:
             sys.stderr.write(f"Error from weather API: {data}\n")
             sys.exit(1)
         return data['daily']
-    except requests.exceptions.RequestException as e:
+    except urllib.error.URLError as e:
         sys.stderr.write(f"Error fetching weather data: {e}\n")
         sys.exit(1)
-    except KeyError:
-        sys.stderr.write(f"Unexpected API response format: {response.text}\n")
+    except (KeyError, json.JSONDecodeError):
+        sys.stderr.write(f"Unexpected API response format: {response_text}\n")
         sys.exit(1)
 
 def convert_svg_to_png(svg_path):
