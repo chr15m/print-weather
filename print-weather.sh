@@ -2,6 +2,24 @@
 
 set -euo pipefail
 
+if [ ! -d "weather-icons" ]; then
+    echo "Error: weather-icons directory not found." >&2
+    echo "Please run 'git submodule update --init' to fetch it." >&2
+    exit 1
+fi
+
+if [ ! -f "printimage.py" ]; then
+    echo "Error: printimage.py not found." >&2
+    echo "If using git, you can try to restore it with: git checkout printimage.py" >&2
+    exit 1
+fi
+
+if ! python3 -c "import PIL" 2>/dev/null; then
+    echo "Error: The 'Pillow' python library is required by printimage.py but is not installed." >&2
+    echo "Please install it, for example: 'pip install Pillow'" >&2
+    exit 1
+fi
+
 get_weather_icon_path() {
     local code=$1
     local icon_path="./weather-icons/svg/"
