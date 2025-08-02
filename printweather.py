@@ -159,7 +159,7 @@ def format_date_with_ordinal(d):
         suffix = "th"
     else:
         suffix = ["st", "nd", "rd"][day % 10 - 1]
-    return d.strftime(f"%d{suffix} %b %Y")
+    return d.strftime(f"%-d{suffix} %b %Y")
 
 def main():
     """Main script execution."""
