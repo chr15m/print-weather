@@ -180,6 +180,7 @@ def main():
     weather_icon_svg_path = get_weather_icon_path(weather_code)
     weather_icon_png_path = convert_svg_to_png(weather_icon_svg_path)
 
+    sys.stdout.buffer.write(b'\x1b\x7b\x01')
     sys.stdout.buffer.write(b'\x1d\x21\x11')
     sys.stdout.buffer.write(b'\n')
     sys.stdout.buffer.write(f"{precip_chance}% ({precip_hours}h)\n".encode("ascii"))
@@ -191,6 +192,7 @@ def main():
     sys.stdout.buffer.write(b'\n')
     sys.stdout.buffer.write(f"{format_date_with_ordinal(datetime.now())}\n".encode("ascii"))
     sys.stdout.buffer.write(b'\x1d\x21\x00')
+    sys.stdout.buffer.write(b'\x1b\x7b\x00')
     sys.stdout.buffer.write(b'\n\n\n')
 
 if __name__ == "__main__":
